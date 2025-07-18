@@ -2,39 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* MESS Brand Design System - Multi-Mode Aesthetics */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
+    /* Base System Colors */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    --foreground: 0 0% 8%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 0 0% 8%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 0 0% 8%;
+    --border: 0 0% 90%;
+    --input: 0 0% 95%;
+    --ring: 0 0% 8%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* MESS Brand Colors */
+    --primary: 0 0% 8%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 8%;
+    --accent: 0 0% 8%;
+    --accent-foreground: 0 0% 98%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 45%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Monochrome Mode - Minimalist/Expensive */
+    --mono-bg: 0 0% 100%;
+    --mono-fg: 0 0% 8%;
+    --mono-accent: 0 0% 15%;
+    --mono-muted: 0 0% 95%;
+    --mono-border: 0 0% 90%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Street Mode - Raw/Glitch/Urban */
+    --street-bg: 0 0% 5%;
+    --street-fg: 0 0% 95%;
+    --street-accent: 120 100% 50%;
+    --street-accent2: 300 100% 50%;
+    --street-danger: 0 100% 50%;
+    --street-warning: 45 100% 50%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Casual Mode - Soft/Aesthetic */
+    --casual-bg: 30 15% 95%;
+    --casual-fg: 30 8% 20%;
+    --casual-accent: 200 50% 70%;
+    --casual-accent2: 320 40% 80%;
+    --casual-muted: 30 20% 90%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Gradients */
+    --gradient-mono: linear-gradient(135deg, hsl(0 0% 100%), hsl(0 0% 95%));
+    --gradient-street: linear-gradient(135deg, hsl(0 0% 5%), hsl(240 20% 10%));
+    --gradient-street-glow: linear-gradient(135deg, hsl(120 100% 50% / 0.1), hsl(300 100% 50% / 0.1));
+    --gradient-casual: linear-gradient(135deg, hsl(30 15% 95%), hsl(200 30% 90%));
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Shadows */
+    --shadow-mono: 0 4px 20px hsl(0 0% 0% / 0.1);
+    --shadow-street: 0 0 30px hsl(120 100% 50% / 0.3);
+    --shadow-casual: 0 8px 30px hsl(200 50% 70% / 0.2);
+
+    /* Typography Scale */
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+    --font-accent: 'Space Grotesk', sans-serif;
 
     --radius: 0.5rem;
 
@@ -55,42 +88,27 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+  /* Mode Classes */
+  .mode-monochrome {
+    --background: var(--mono-bg);
+    --foreground: var(--mono-fg);
+    --accent: var(--mono-accent);
+    --muted: var(--mono-muted);
+    --border: var(--mono-border);
+  }
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+  .mode-street {
+    --background: var(--street-bg);
+    --foreground: var(--street-fg);
+    --accent: var(--street-accent);
+    --border: var(--street-accent);
+  }
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+  .mode-casual {
+    --background: var(--casual-bg);
+    --foreground: var(--casual-fg);
+    --accent: var(--casual-accent);
+    --muted: var(--casual-muted);
   }
 }
 
@@ -100,6 +118,241 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-body transition-all duration-500;
+  }
+
+  h1, h2, h3 {
+    @apply font-display;
+  }
+
+  .font-accent {
+    font-family: var(--font-accent);
+  }
+}
+
+@layer components {
+  /* Mode-specific utility classes */
+  .text-gradient-street {
+    background: linear-gradient(135deg, hsl(var(--street-accent)), hsl(var(--street-accent2)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glitch-effect {
+    position: relative;
+    animation: glitch-skew 1s infinite linear alternate-reverse;
+  }
+
+  .glitch-effect::before,
+  .glitch-effect::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch-effect::before {
+    animation: glitch-anim-1 0.5s infinite linear alternate-reverse;
+    color: hsl(var(--street-accent));
+    z-index: -1;
+  }
+
+  .glitch-effect::after {
+    animation: glitch-anim-2 1s infinite linear alternate-reverse;
+    color: hsl(var(--street-accent2));
+    z-index: -2;
+  }
+
+  .mode-transition {
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .slide-enter {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  .slide-enter-active {
+    transform: translateX(0);
+    opacity: 1;
+    transition: all 0.8s ease-out;
+  }
+
+  .slide-exit {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .slide-exit-active {
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: all 0.8s ease-out;
+  }
+}
+
+@layer utilities {
+  .bg-gradient-mono {
+    background: var(--gradient-mono);
+  }
+
+  .bg-gradient-street {
+    background: var(--gradient-street);
+  }
+
+  .bg-gradient-casual {
+    background: var(--gradient-casual);
+  }
+
+  .shadow-mono {
+    box-shadow: var(--shadow-mono);
+  }
+
+  .shadow-street {
+    box-shadow: var(--shadow-street);
+  }
+
+  .shadow-casual {
+    box-shadow: var(--shadow-casual);
+  }
+}
+
+@keyframes glitch-anim-1 {
+  0% {
+    clip: rect(64px, 9999px, 66px, 0);
+    transform: skew(0.5deg);
+  }
+  5% {
+    clip: rect(30px, 9999px, 36px, 0);
+    transform: skew(0.1deg);
+  }
+  10% {
+    clip: rect(70px, 9999px, 71px, 0);
+    transform: skew(0.8deg);
+  }
+  15% {
+    clip: rect(10px, 9999px, 40px, 0);
+    transform: skew(0.2deg);
+  }
+  20% {
+    clip: rect(80px, 9999px, 81px, 0);
+    transform: skew(0.9deg);
+  }
+  25% {
+    clip: rect(50px, 9999px, 60px, 0);
+    transform: skew(0.3deg);
+  }
+  30% {
+    clip: rect(20px, 9999px, 21px, 0);
+    transform: skew(0.7deg);
+  }
+  35% {
+    clip: rect(90px, 9999px, 91px, 0);
+    transform: skew(0.4deg);
+  }
+  40% {
+    clip: rect(5px, 9999px, 6px, 0);
+    transform: skew(0.6deg);
+  }
+  45% {
+    clip: rect(75px, 9999px, 76px, 0);
+    transform: skew(0.1deg);
+  }
+  50% {
+    clip: rect(35px, 9999px, 45px, 0);
+    transform: skew(0.5deg);
+  }
+  100% {
+    clip: rect(45px, 9999px, 46px, 0);
+    transform: skew(0.2deg);
+  }
+}
+
+@keyframes glitch-anim-2 {
+  0% {
+    clip: rect(65px, 9999px, 95px, 0);
+    transform: skew(0.2deg);
+  }
+  5% {
+    clip: rect(25px, 9999px, 35px, 0);
+    transform: skew(0.8deg);
+  }
+  10% {
+    clip: rect(85px, 9999px, 90px, 0);
+    transform: skew(0.1deg);
+  }
+  15% {
+    clip: rect(15px, 9999px, 25px, 0);
+    transform: skew(0.9deg);
+  }
+  20% {
+    clip: rect(55px, 9999px, 85px, 0);
+    transform: skew(0.3deg);
+  }
+  25% {
+    clip: rect(5px, 9999px, 15px, 0);
+    transform: skew(0.7deg);
+  }
+  30% {
+    clip: rect(45px, 9999px, 75px, 0);
+    transform: skew(0.4deg);
+  }
+  35% {
+    clip: rect(95px, 9999px, 100px, 0);
+    transform: skew(0.6deg);
+  }
+  40% {
+    clip: rect(35px, 9999px, 65px, 0);
+    transform: skew(0.1deg);
+  }
+  45% {
+    clip: rect(75px, 9999px, 85px, 0);
+    transform: skew(0.5deg);
+  }
+  50% {
+    clip: rect(1px, 9999px, 5px, 0);
+    transform: skew(0.2deg);
+  }
+  100% {
+    clip: rect(40px, 9999px, 70px, 0);
+    transform: skew(0.8deg);
+  }
+}
+
+@keyframes glitch-skew {
+  0% {
+    transform: skew(0deg);
+  }
+  10% {
+    transform: skew(1deg);
+  }
+  20% {
+    transform: skew(-1deg);
+  }
+  30% {
+    transform: skew(2deg);
+  }
+  40% {
+    transform: skew(-2deg);
+  }
+  50% {
+    transform: skew(1deg);
+  }
+  60% {
+    transform: skew(-1deg);
+  }
+  70% {
+    transform: skew(0deg);
+  }
+  80% {
+    transform: skew(1deg);
+  }
+  90% {
+    transform: skew(-1deg);
+  }
+  100% {
+    transform: skew(0deg);
   }
 }

@@ -18,6 +18,11 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				display: ['var(--font-display)'],
+				body: ['var(--font-body)'],
+				accent: ['var(--font-accent)']
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -52,15 +57,28 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
+				// MESS Brand Mode Colors
+				mono: {
+					bg: 'hsl(var(--mono-bg))',
+					fg: 'hsl(var(--mono-fg))',
+					accent: 'hsl(var(--mono-accent))',
+					muted: 'hsl(var(--mono-muted))',
+					border: 'hsl(var(--mono-border))'
+				},
+				street: {
+					bg: 'hsl(var(--street-bg))',
+					fg: 'hsl(var(--street-fg))',
+					accent: 'hsl(var(--street-accent))',
+					accent2: 'hsl(var(--street-accent2))',
+					danger: 'hsl(var(--street-danger))',
+					warning: 'hsl(var(--street-warning))'
+				},
+				casual: {
+					bg: 'hsl(var(--casual-bg))',
+					fg: 'hsl(var(--casual-fg))',
+					accent: 'hsl(var(--casual-accent))',
+					accent2: 'hsl(var(--casual-accent2))',
+					muted: 'hsl(var(--casual-muted))'
 				}
 			},
 			borderRadius: {
@@ -84,11 +102,48 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'slide-up': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(30px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'mode-switch': {
+					'0%': {
+						opacity: '0.8',
+						transform: 'scale(0.98)'
+					},
+					'50%': {
+						opacity: '0.9',
+						transform: 'scale(1.01)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'scale(1)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.6s ease-out',
+				'slide-up': 'slide-up 0.8s ease-out',
+				'mode-switch': 'mode-switch 0.8s ease-out'
 			}
 		}
 	},
