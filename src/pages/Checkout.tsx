@@ -1,0 +1,205 @@
+import React, { useState } from 'react';
+import { useCart } from '@/context/CartContext';
+import { useNavigate } from 'react-router-dom';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { X, Lock } from 'lucide-react';
+
+const modeStyles = {
+  monochrome: {
+    bg: 'bg-mono-bg',
+    fg: 'text-mono-fg',
+    accent: 'bg-mono-accent text-mono-bg',
+    border: 'border-mono-border',
+    error: 'border-red-500',
+    badge: 'bg-mono-muted text-mono-accent',
+  },
+  street: {
+    bg: 'bg-street-bg',
+    fg: 'text-street-fg',
+    accent: 'bg-street-accent text-street-bg',
+    border: 'border-street-accent',
+    error: 'border-red-500',
+    badge: 'bg-street-accent2 text-street-bg',
+  },
+  casual: {
+    bg: 'bg-casual-bg',
+    fg: 'text-casual-fg',
+    accent: 'bg-casual-accent text-casual-bg',
+    border: 'border-casual-accent',
+    error: 'border-red-500',
+    badge: 'bg-casual-accent2 text-casual-bg',
+  },
+};
+
+const countries = [
+  'United States', 'Canada', 'United Kingdom', 'Australia', 'Germany', 'France', 'Japan', 'Other',
+];
+
+const Checkout = () => {
+  const { items, mode, subtotal, clearCart } = useCart();
+  const styles = modeStyles[mode];
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [shipping, setShipping] = useState({
+    name: '', email: '', phone: '', address: '', city: '', state: '', zip: '', country: '',
+  });
+  const [payment, setPayment] = useState({
+    card: '', exp: '', cvv: '', billingSame: true, billing: '',
+  });
+  const [errors, setErrors] = useState<any>({});
+
+  const tax = subtotal * 0.08;
+  const shippingCost = subtotal > 100 ? 0 : 8;
+  const total = subtotal + tax + shippingCost;
+
+  const validate = () => {
+    const errs: any = {};
+    if (!shipping.name) errs.name = true;
+    if (!shipping.email || !/^[^@]+@[^@]+\.[^@]+$/.test(shipping.email)) errs.email = true;
+    if (!shipping.phone) errs.phone = true;
+    if (!shipping.address) errs.address = true;
+    if (!shipping.city) errs.city = true;
+    if (!shipping.state) errs.state = true;
+    if (!shipping.zip) errs.zip = true;
+    if (!shipping.country) errs.country = true;
+    if (!payment.card || payment.card.length < 12) errs.card = true;
+    if (!payment.exp) errs.exp = true;
+    if (!payment.cvv || payment.cvv.length < 3) errs.cvv = true;
+    if (!payment.billingSame && !payment.billing) errs.billing = true;
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handlePlaceOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validate()) return;
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setShowSuccess(true);
+      clearCart();
+      setTimeout(() => navigate('/confirmation'), 1800);
+    }, 1800);
+  };
+
+  if (showSuccess) {
+    return (
+      <div className={`min-h-screen flex flex-col items-center justify-center ${styles.bg} ${styles.fg} transition-all`}>
+        <div className="p-8 rounded-xl shadow-lg bg-white/90 animate-fade-in text-center">
+          <h2 className="text-3xl font-display font-bold mb-4">Order Placed!</h2>
+          <p className="font-accent mb-2">Thank you for shopping with MESS.</p>
+          <Button className={`mt-4 font-accent ${styles.accent}`} onClick={() => navigate('/')}>Back to Home</Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`min-h-screen ${styles.bg} ${styles.fg} transition-all`}> 
+      <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8 animate-fade-in">
+        {/* Cart Summary */}
+        <div className="md:w-1/2 w-full space-y-6">
+          <h2 className="text-2xl font-display font-bold mb-4">Cart Summary</h2>
+          {items.length === 0 ? (
+            <div className="p-6 rounded-lg bg-muted/50 text-center font-accent">Your cart is empty.</div>
+          ) : (
+            items.map((item) => (
+              <Card key={item.id + (item.size || '') + (item.color || '')} className={`flex items-center gap-4 p-4 border ${styles.border} shadow-md`}>
+                <img src={item.thumbnail} alt={item.name} className="w-16 h-16 object-cover rounded-md border" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className={`px-2 py-0.5 rounded text-xs font-accent font-semibold uppercase ${styles.badge}`}>{item.style}</span>
+                  </div>
+                  <div className="font-display font-bold truncate text-lg">{item.name}</div>
+                  <div className="text-sm font-accent opacity-70">
+                    {item.size && <span>Size: {item.size} </span>}
+                    {item.color && <span>Color: {item.color}</span>}
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-2">
+                  <span className="font-bold font-display text-base">${item.price.toFixed(2)}</span>
+                  <span className="font-accent text-xs">Qty: {item.quantity}</span>
+                </div>
+              </Card>
+            ))
+          )}
+        </div>
+        {/* Forms */}
+        <form className="md:w-1/2 w-full space-y-8" onSubmit={handlePlaceOrder} autoComplete="off">
+          {/* Shipping Info */}
+          <div className="space-y-4 p-6 rounded-lg shadow-md border bg-white/80">
+            <h3 className="font-display text-xl font-bold mb-2">Shipping Information</h3>
+            <Input placeholder="Full Name" value={shipping.name} onChange={e => setShipping(s => ({ ...s, name: e.target.value }))} className={`font-accent ${errors.name ? styles.error : ''}`} />
+            <Input placeholder="Email Address" value={shipping.email} onChange={e => setShipping(s => ({ ...s, email: e.target.value }))} className={`font-accent ${errors.email ? styles.error : ''}`} />
+            <Input placeholder="Phone Number" value={shipping.phone} onChange={e => setShipping(s => ({ ...s, phone: e.target.value }))} className={`font-accent ${errors.phone ? styles.error : ''}`} />
+            <Input placeholder="Street Address" value={shipping.address} onChange={e => setShipping(s => ({ ...s, address: e.target.value }))} className={`font-accent ${errors.address ? styles.error : ''}`} />
+            <div className="flex gap-2">
+              <Input placeholder="City" value={shipping.city} onChange={e => setShipping(s => ({ ...s, city: e.target.value }))} className={`font-accent ${errors.city ? styles.error : ''}`} />
+              <Input placeholder="State/Province" value={shipping.state} onChange={e => setShipping(s => ({ ...s, state: e.target.value }))} className={`font-accent ${errors.state ? styles.error : ''}`} />
+            </div>
+            <div className="flex gap-2">
+              <Input placeholder="ZIP/Postal Code" value={shipping.zip} onChange={e => setShipping(s => ({ ...s, zip: e.target.value }))} className={`font-accent ${errors.zip ? styles.error : ''}`} />
+              <select value={shipping.country} onChange={e => setShipping(s => ({ ...s, country: e.target.value }))} className={`font-accent rounded-md border px-3 py-2 ${errors.country ? styles.error : styles.border}`} required>
+                <option value="">Country</option>
+                {countries.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+          </div>
+          {/* Payment Details */}
+          <div className="space-y-4 p-6 rounded-lg shadow-md border bg-white/80">
+            <div className="flex items-center gap-2 mb-2">
+              <Lock className="w-5 h-5 text-green-600" />
+              <h3 className="font-display text-xl font-bold">Payment Details <span className="ml-2 text-xs font-accent bg-green-100 text-green-700 px-2 py-0.5 rounded">Secure Checkout</span></h3>
+            </div>
+            <Input placeholder="Card Number" value={payment.card} onChange={e => setPayment(p => ({ ...p, card: e.target.value }))} className={`font-accent ${errors.card ? styles.error : ''}`} maxLength={19} />
+            <div className="flex gap-2">
+              <Input placeholder="MM/YY" value={payment.exp} onChange={e => setPayment(p => ({ ...p, exp: e.target.value }))} className={`font-accent ${errors.exp ? styles.error : ''}`} maxLength={5} />
+              <Input placeholder="CVV" value={payment.cvv} onChange={e => setPayment(p => ({ ...p, cvv: e.target.value }))} className={`font-accent ${errors.cvv ? styles.error : ''}`} maxLength={4} />
+            </div>
+            <div className="flex items-center gap-2">
+              <input type="checkbox" checked={payment.billingSame} onChange={e => setPayment(p => ({ ...p, billingSame: e.target.checked }))} />
+              <span className="font-accent text-sm">Billing address same as shipping</span>
+            </div>
+            {!payment.billingSame && (
+              <Input placeholder="Billing Address" value={payment.billing} onChange={e => setPayment(p => ({ ...p, billing: e.target.value }))} className={`font-accent ${errors.billing ? styles.error : ''}`} />
+            )}
+            {/* Express Pay Placeholders */}
+            <div className="flex gap-2 mt-2">
+              <Button type="button" variant="outline" className="flex-1 font-accent opacity-70 cursor-not-allowed" disabled>PayPal</Button>
+              <Button type="button" variant="outline" className="flex-1 font-accent opacity-70 cursor-not-allowed" disabled>Apple Pay</Button>
+            </div>
+          </div>
+          {/* Order Summary */}
+          <div className="space-y-2 p-6 rounded-lg shadow-md border bg-white/80">
+            <h3 className="font-display text-xl font-bold mb-2">Order Summary</h3>
+            <div className="flex justify-between font-accent">
+              <span>Subtotal</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between font-accent">
+              <span>Estimated Tax</span>
+              <span>${tax.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between font-accent">
+              <span>Shipping</span>
+              <span>{shippingCost === 0 ? 'Free' : `$${shippingCost.toFixed(2)}`}</span>
+            </div>
+            <div className="flex justify-between font-display text-lg font-bold mt-2">
+              <span>Total</span>
+              <span>${total.toFixed(2)}</span>
+            </div>
+            <Button type="submit" className={`w-full mt-4 font-accent ${styles.accent} shadow-lg hover:scale-105 transition-transform flex items-center justify-center`} disabled={loading}>
+              {loading ? <span className="animate-spin mr-2 w-4 h-4 border-2 border-t-transparent border-current rounded-full"></span> : null}
+              Place Order
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default Checkout; 

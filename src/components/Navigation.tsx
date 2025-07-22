@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Menu, X, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useCart } from '@/context/CartContext';
+import CartDrawer from './CartDrawer';
 
 interface NavigationProps {
   currentMode?: 'monochrome' | 'street' | 'casual';
@@ -9,6 +11,12 @@ interface NavigationProps {
 
 const Navigation = ({ currentMode = 'monochrome' }: NavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const { items, setMode } = useCart();
+
+  useEffect(() => {
+    setMode(currentMode);
+  }, [currentMode, setMode]);
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -44,7 +52,7 @@ const Navigation = ({ currentMode = 'monochrome' }: NavigationProps) => {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${getModeClasses()} backdrop-blur-sm bg-opacity-95`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
+          {/* Logo - always on left */}
           <NavLink to="/" className="flex items-center">
             <h1 className={`text-2xl font-display font-bold tracking-wider ${
               currentMode === 'street' ? 'text-gradient-street glitch-effect' : ''
@@ -53,7 +61,7 @@ const Navigation = ({ currentMode = 'monochrome' }: NavigationProps) => {
             </h1>
           </NavLink>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - center with cart on right */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <NavLink
@@ -75,17 +83,30 @@ const Navigation = ({ currentMode = 'monochrome' }: NavigationProps) => {
               </NavLink>
             ))}
             
-            {/* Cart Icon */}
-            <Button variant="ghost" size="icon" className="relative">
+            {/* Cart Icon - desktop only */}
+            <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
               <ShoppingBag className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground rounded-full w-4 h-4 text-xs flex items-center justify-center">
-                0
-              </span>
+              {items.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground rounded-full w-4 h-4 text-xs flex items-center justify-center">
+                  {items.reduce((sum, i) => sum + i.quantity, 0)}
+                </span>
+              )}
             </Button>
+            <CartDrawer open={cartOpen} onOpenChange={setCartOpen} />
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-2">
+            {/* Cart Icon - mobile, outside hamburger */}
+            <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
+              <ShoppingBag className="h-5 w-5" />
+              {items.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground rounded-full w-4 h-4 text-xs flex items-center justify-center">
+                  {items.reduce((sum, i) => sum + i.quantity, 0)}
+                </span>
+              )}
+            </Button>
+            
             <Button
               variant="ghost"
               size="icon"

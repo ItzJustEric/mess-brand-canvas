@@ -2,9 +2,12 @@ import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useCart } from '@/context/CartContext';
+import { toast } from '@/components/ui/use-toast';
 
 const Store = () => {
   const [activeMode, setActiveMode] = useState<'monochrome' | 'street' | 'casual'>('monochrome');
+  const { addItem } = useCart();
 
   const modes = [
     {
@@ -37,6 +40,16 @@ const Store = () => {
         return 'mode-monochrome bg-gradient-mono text-mono-fg';
     }
   };
+
+  // Dynamic product data (could be fetched from API)
+  const products = Array.from({ length: 8 }).map((_, index) => ({
+    id: `product-${activeMode}-${index}`,
+    name: `${activeMode.charAt(0).toUpperCase() + activeMode.slice(1)} Piece #${index + 1}`,
+    price: 199,
+    style: activeMode,
+    thumbnail: '', // Add real image if available
+    // Optionally add size/color here if needed
+  }));
 
   return (
     <div className={`min-h-screen transition-all duration-700 ${getModeClass()}`}>
@@ -97,11 +110,11 @@ const Store = () => {
 
           {/* Products Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {[...Array(8)].map((_, index) => (
-              <Card 
-                key={index} 
+            {products.map((product, index) => (
+              <Card
+                key={product.id}
                 className={`group hover:scale-105 transition-all duration-300 ${
-                  activeMode === 'street' 
+                  activeMode === 'street'
                     ? 'bg-street-bg border-street-accent shadow-street hover:shadow-street'
                     : activeMode === 'casual'
                     ? 'bg-casual-bg border-casual-accent shadow-casual hover:shadow-casual'
@@ -118,24 +131,21 @@ const Store = () => {
                   }`}>
                     {/* Product image placeholder */}
                   </div>
-                  
                   <h3 className="font-accent font-semibold mb-2">
                     {activeMode === 'street' ? (
-                      <span className="text-gradient-street">Product Name</span>
+                      <span className="text-gradient-street">{product.name}</span>
                     ) : (
-                      'Product Name'
+                      product.name
                     )}
                   </h3>
-                  
                   <p className="opacity-70 mb-4 text-sm">
                     Premium {activeMode} collection piece
                   </p>
-                  
                   <div className="flex justify-between items-center">
-                    <span className="font-display font-bold text-lg">$199</span>
-                    <Button 
-                      size="sm" 
-                      variant={activeMode === 'street' ? "default" : "outline"}
+                    <span className="font-display font-bold text-lg">${product.price}</span>
+                    <Button
+                      size="sm"
+                      variant={activeMode === 'street' ? 'default' : 'outline'}
                       className={`font-accent ${
                         activeMode === 'street'
                           ? 'bg-street-accent text-street-bg hover:bg-street-accent2'
@@ -143,6 +153,13 @@ const Store = () => {
                           ? 'border-casual-accent text-casual-accent hover:bg-casual-accent hover:text-casual-bg'
                           : 'border-mono-accent text-mono-accent hover:bg-mono-accent hover:text-mono-bg'
                       }`}
+                      onClick={() => {
+                        addItem(product);
+                        toast({
+                          title: 'Added to Cart',
+                          description: `${product.name} added to your bag!`,
+                        });
+                      }}
                     >
                       Add to Cart
                     </Button>

@@ -64,7 +64,7 @@ const Contact = () => {
                   <h3 className="font-display text-xl font-semibold mb-4">
                     Email
                   </h3>
-                  <p className="font-body">hello@mess-brand.com</p>
+                  <p className="font-body">mess-fashions@outlook.com</p>
                 </CardContent>
               </Card>
 
@@ -74,9 +74,8 @@ const Contact = () => {
                     Social
                   </h3>
                   <div className="space-y-2 font-body">
-                    <p>@mess.brand</p>
-                    <p>@mess_official</p>
-                    <p>/messbrand</p>
+                    <p> Insta: @mess.streetwear</p>
+                    
                   </div>
                 </CardContent>
               </Card>
