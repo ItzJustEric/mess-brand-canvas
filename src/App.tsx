@@ -12,6 +12,8 @@ import NotFound from "./pages/NotFound";
 import { CartProvider } from './context/CartContext';
 import Checkout from './pages/Checkout';
 import { Button } from './components/ui/button';
+import Success from './pages/Success';
+import Cancel from './pages/Cancel';
 
 const queryClient = new QueryClient();
 
@@ -40,6 +42,8 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/confirmation" element={<Confirmation />} />
+            <Route path="/success" element={<Success />} />
+            <Route path="/cancel" element={<Cancel />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

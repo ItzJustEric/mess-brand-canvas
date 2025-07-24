@@ -71,3 +71,29 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+## Stripe Payment Integration
+
+This project uses Stripe Checkout for secure payments.
+
+### Setup
+
+1. **Backend**
+   - Create a `.env` file (see `.env.example`) with your Stripe secret key and frontend URL.
+   - Run the backend server (`server.js`) with Node.js: `node server.js`.
+   - The backend exposes `/create-checkout-session` for the frontend to create Stripe sessions.
+
+2. **Frontend**
+   - Add your Stripe publishable key and backend URL to a `.env` file (see `.env.example`).
+   - The frontend calls the backend to create a session and redirects users to Stripe Checkout.
+
+### Updating for Real Products
+- Replace the mock cart item mapping in `server.js` with your product database lookup.
+- Update success/cancel URLs as needed.
+
+### Security
+- Never commit real API keys. Use environment variables.
+- The backend must keep the Stripe secret key private.
+
+### Test Mode
+- The current setup uses Stripe test keys and products. Switch to live keys for production.
