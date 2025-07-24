@@ -75,15 +75,14 @@ const Checkout = () => {
     if (!validate()) return;
     
     setLoading(true);
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
     
     try {
       // Send cart items and customer info to backend to create Stripe session
-      const res = await fetch(`${backendUrl}/create-checkout-session`, {
+      const res = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          items: items,
+          items,
           customerInfo: shipping // Pass customer info to prefill Stripe Checkout
         }),
       });
