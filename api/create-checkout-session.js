@@ -16,7 +16,8 @@ export default async function handler(req, res) {
       cancel_url: `${process.env.FRONTEND_URL}/cancel`,
     });
 
-    res.status(200).json({ url: session.url });
+    res.status(200).json({ id: session.id });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
