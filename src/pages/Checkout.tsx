@@ -78,7 +78,7 @@ const Checkout = () => {
     
     try {
       // Send cart items and customer info to backend to create Stripe session
-      const res = await fetch('/api/create-checkout-session', {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/create-checkout-session`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
