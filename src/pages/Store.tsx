@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Navigation from '@/components/Navigation';
+import { useRecentlyViewed } from '@/context/RecentlyViewedContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -15,6 +16,7 @@ const Store = () => {
   const [quickViewProduct, setQuickViewProduct] = useState<any>(null);
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   const { addItem } = useCart();
+  const { addToRecentlyViewed } = useRecentlyViewed();
 
   const modes = [
     {
@@ -90,6 +92,18 @@ const Store = () => {
   const openQuickView = (product: any) => {
     setQuickViewProduct(product);
     setIsQuickViewOpen(true);
+    // Add to recently viewed when quick view is opened
+    addToRecentlyViewed({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      style: product.style,
+      category: product.category,
+      size: product.size,
+      color: product.color,
+      description: product.description,
+      thumbnail: product.thumbnail || '',
+    });
   };
 
   const closeQuickView = () => {

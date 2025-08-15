@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Menu, X, ShoppingBag, User, LogOut, Package, Eye, CreditCard, MapPin } from 'lucide-react';
+import { Menu, X, ShoppingBag, User, LogOut, Package, Eye, CreditCard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -111,21 +111,21 @@ const Navigation = ({ currentMode = 'monochrome' }: NavigationProps) => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuItem>
-                      <Package className="mr-2 h-4 w-4" />
-                      My Orders
+                    <DropdownMenuItem asChild>
+                      <NavLink to="/my-orders" className="flex items-center w-full">
+                        <Package className="mr-2 h-4 w-4" />
+                        My Orders
+                      </NavLink>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Eye className="mr-2 h-4 w-4" />
-                      Recently Viewed
+                    <DropdownMenuItem asChild>
+                      <NavLink to="/recently-viewed" className="flex items-center w-full">
+                        <Eye className="mr-2 h-4 w-4" />
+                        Recently Viewed
+                      </NavLink>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <CreditCard className="mr-2 h-4 w-4" />
                       Payment Methods
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <MapPin className="mr-2 h-4 w-4" />
-                      Addresses
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={signOut}>
@@ -197,21 +197,25 @@ const Navigation = ({ currentMode = 'monochrome' }: NavigationProps) => {
               <div className="border-t border-gray-700 pt-3 mt-3">
                 {user ? (
                   <>
-                    <button className="block w-full text-left px-3 py-2 font-accent font-medium hover:opacity-80">
+                    <NavLink
+                      to="/my-orders"
+                      onClick={() => setIsOpen(false)}
+                      className="block w-full text-left px-3 py-2 font-accent font-medium hover:opacity-80"
+                    >
                       <Package className="inline mr-2 h-4 w-4" />
                       My Orders
-                    </button>
-                    <button className="block w-full text-left px-3 py-2 font-accent font-medium hover:opacity-80">
+                    </NavLink>
+                    <NavLink
+                      to="/recently-viewed"
+                      onClick={() => setIsOpen(false)}
+                      className="block w-full text-left px-3 py-2 font-accent font-medium hover:opacity-80"
+                    >
                       <Eye className="inline mr-2 h-4 w-4" />
                       Recently Viewed
-                    </button>
+                    </NavLink>
                     <button className="block w-full text-left px-3 py-2 font-accent font-medium hover:opacity-80">
                       <CreditCard className="inline mr-2 h-4 w-4" />
                       Payment Methods
-                    </button>
-                    <button className="block w-full text-left px-3 py-2 font-accent font-medium hover:opacity-80">
-                      <MapPin className="inline mr-2 h-4 w-4" />
-                      Addresses
                     </button>
                     <div className="border-t border-gray-600 mt-2 pt-2">
                       <button
