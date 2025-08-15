@@ -1,7 +1,14 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Menu, X, ShoppingBag, User, LogOut } from 'lucide-react';
+import { Menu, X, ShoppingBag, User, LogOut, Package, Eye, CreditCard, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import CartDrawer from './CartDrawer';
@@ -97,9 +104,36 @@ const Navigation = ({ currentMode = 'monochrome' }: NavigationProps) => {
               </Button>
 
               {user ? (
-                <Button variant="ghost" size="icon" onClick={signOut}>
-                  <LogOut className="h-5 w-5" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <User className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem>
+                      <Package className="mr-2 h-4 w-4" />
+                      My Orders
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Eye className="mr-2 h-4 w-4" />
+                      Recently Viewed
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      Payment Methods
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <MapPin className="mr-2 h-4 w-4" />
+                      Addresses
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={signOut}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ) : (
                 <Button variant="ghost" size="icon" asChild>
                   <NavLink to="/auth">
@@ -162,12 +196,33 @@ const Navigation = ({ currentMode = 'monochrome' }: NavigationProps) => {
               {/* Mobile Auth Links */}
               <div className="border-t border-gray-700 pt-3 mt-3">
                 {user ? (
-                  <button
-                    onClick={signOut}
-                    className="block w-full text-left px-3 py-2 font-accent font-medium hover:opacity-80"
-                  >
-                    Sign Out
-                  </button>
+                  <>
+                    <button className="block w-full text-left px-3 py-2 font-accent font-medium hover:opacity-80">
+                      <Package className="inline mr-2 h-4 w-4" />
+                      My Orders
+                    </button>
+                    <button className="block w-full text-left px-3 py-2 font-accent font-medium hover:opacity-80">
+                      <Eye className="inline mr-2 h-4 w-4" />
+                      Recently Viewed
+                    </button>
+                    <button className="block w-full text-left px-3 py-2 font-accent font-medium hover:opacity-80">
+                      <CreditCard className="inline mr-2 h-4 w-4" />
+                      Payment Methods
+                    </button>
+                    <button className="block w-full text-left px-3 py-2 font-accent font-medium hover:opacity-80">
+                      <MapPin className="inline mr-2 h-4 w-4" />
+                      Addresses
+                    </button>
+                    <div className="border-t border-gray-600 mt-2 pt-2">
+                      <button
+                        onClick={signOut}
+                        className="block w-full text-left px-3 py-2 font-accent font-medium hover:opacity-80"
+                      >
+                        <LogOut className="inline mr-2 h-4 w-4" />
+                        Sign Out
+                      </button>
+                    </div>
+                  </>
                 ) : (
                   <NavLink
                     to="/auth"
