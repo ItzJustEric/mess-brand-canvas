@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Menu, X, ShoppingBag } from 'lucide-react';
+import { Menu, X, ShoppingBag, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 import CartDrawer from './CartDrawer';
 
 interface NavigationProps {
@@ -13,6 +14,7 @@ const Navigation = ({ currentMode = 'monochrome' }: NavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const { items, setMode } = useCart();
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     setMode(currentMode);
@@ -83,15 +85,29 @@ const Navigation = ({ currentMode = 'monochrome' }: NavigationProps) => {
               </NavLink>
             ))}
             
-            {/* Cart Icon - desktop only */}
-            <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
-              <ShoppingBag className="h-5 w-5" />
-              {items.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground rounded-full w-4 h-4 text-xs flex items-center justify-center">
-                  {items.reduce((sum, i) => sum + i.quantity, 0)}
-                </span>
+            {/* Desktop Icons */}
+            <div className="flex items-center space-x-2">
+              <Button variant="ghost" size="icon" className="relative" onClick={() => setCartOpen(true)}>
+                <ShoppingBag className="h-5 w-5" />
+                {items.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-accent text-accent-foreground rounded-full w-4 h-4 text-xs flex items-center justify-center">
+                    {items.reduce((sum, i) => sum + i.quantity, 0)}
+                  </span>
+                )}
+              </Button>
+
+              {user ? (
+                <Button variant="ghost" size="icon" onClick={signOut}>
+                  <LogOut className="h-5 w-5" />
+                </Button>
+              ) : (
+                <Button variant="ghost" size="icon" asChild>
+                  <NavLink to="/auth">
+                    <User className="h-5 w-5" />
+                  </NavLink>
+                </Button>
               )}
-            </Button>
+            </div>
             <CartDrawer open={cartOpen} onOpenChange={setCartOpen} />
           </div>
 
@@ -142,6 +158,26 @@ const Navigation = ({ currentMode = 'monochrome' }: NavigationProps) => {
                   {getGlitchText(item.name)}
                 </NavLink>
               ))}
+              
+              {/* Mobile Auth Links */}
+              <div className="border-t border-gray-700 pt-3 mt-3">
+                {user ? (
+                  <button
+                    onClick={signOut}
+                    className="block w-full text-left px-3 py-2 font-accent font-medium hover:opacity-80"
+                  >
+                    Sign Out
+                  </button>
+                ) : (
+                  <NavLink
+                    to="/auth"
+                    onClick={() => setIsOpen(false)}
+                    className="block px-3 py-2 font-accent font-medium hover:opacity-80"
+                  >
+                    Sign In
+                  </NavLink>
+                )}
+              </div>
             </div>
           </div>
         )}
