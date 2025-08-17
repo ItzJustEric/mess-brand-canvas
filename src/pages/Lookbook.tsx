@@ -125,22 +125,7 @@ const Lookbook = () => {
               </p>
             </div>
             
-            {/* Remaining placeholder cards */}
-            {[...Array(4)].map((_, index) => (
-              <div 
-                key={index + 3}
-                className="group cursor-pointer animate-slide-up"
-                style={{ animationDelay: `${(index + 3) * 0.1}s` }}
-              >
-                <div className="aspect-[4/5] bg-gradient-to-br from-muted to-border rounded-lg mb-4 overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-accent/10 to-accent/5 hover:from-accent/20 hover:to-accent/10 transition-all duration-500">
-                    {/* Lookbook image placeholder */}
-                  </div>
-                </div>
-                <h3 className="font-accent font-medium mb-2">Editorial {index + 4}</h3>
-                <p className="text-sm opacity-70">Concept art & styling</p>
-              </div>
-            ))}
+
           </div>
         </div>
       </div>
