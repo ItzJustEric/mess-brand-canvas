@@ -51,17 +51,36 @@ const Store = () => {
   };
 
   // Enhanced product data with more realistic details
-  const products = Array.from({ length: 12 }).map((_, index) => ({
-    id: `product-${activeMode}-${index}`,
-    name: `${activeMode.charAt(0).toUpperCase() + activeMode.slice(1)} Piece #${index + 1}`,
-    price: Math.floor(Math.random() * 200) + 99, // Random price between 99-299
-    style: activeMode,
-    category: ['tops', 'bottoms', 'outerwear', 'accessories'][Math.floor(Math.random() * 4)],
-    size: ['XS', 'S', 'M', 'L', 'XL'][Math.floor(Math.random() * 5)],
-    color: ['Black', 'White', 'Navy', 'Gray', 'Beige'][Math.floor(Math.random() * 5)],
-    description: `Premium ${activeMode} collection piece featuring high-quality materials and contemporary design. Perfect for those who appreciate sophisticated style and exceptional craftsmanship.`,
-    thumbnail: '', // Add real image if available
-  }));
+  const products = Array.from({ length: 12 }).map((_, index) => {
+    const category = ['tops', 'bottoms', 'outerwear', 'accessories'][Math.floor(Math.random() * 4)];
+    
+    // Realistic pricing based on category and style
+    const getPrice = (cat: string, mode: string) => {
+      const basePrices = {
+        tops: { monochrome: 85, street: 95, casual: 75 },
+        bottoms: { monochrome: 120, street: 135, casual: 110 },
+        outerwear: { monochrome: 180, street: 200, casual: 165 },
+        accessories: { monochrome: 45, street: 55, casual: 40 }
+      };
+      
+      const basePrice = basePrices[cat as keyof typeof basePrices][mode as keyof typeof basePrices.tops];
+      // Add some variation (±15%) to make it feel more natural
+      const variation = (Math.random() - 0.5) * 0.3;
+      return Math.round(basePrice * (1 + variation));
+    };
+
+    return {
+      id: `product-${activeMode}-${index}`,
+      name: `${activeMode.charAt(0).toUpperCase() + activeMode.slice(1)} Piece #${index + 1}`,
+      price: getPrice(category, activeMode),
+      style: activeMode,
+      category: category,
+      size: ['XS', 'S', 'M', 'L', 'XL'][Math.floor(Math.random() * 5)],
+      color: ['Black', 'White', 'Navy', 'Gray', 'Beige'][Math.floor(Math.random() * 5)],
+      description: `Premium ${activeMode} collection piece featuring high-quality materials and contemporary design. Perfect for those who appreciate sophisticated style and exceptional craftsmanship.`,
+      thumbnail: '', // Add real image if available
+    };
+  });
 
   // Sorting function
   const getSortedProducts = () => {
