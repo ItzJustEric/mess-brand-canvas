@@ -134,12 +134,42 @@ const CartDrawer = ({ open, onOpenChange }: { open: boolean; onOpenChange: (v: b
             <span className="font-accent text-lg">Subtotal</span>
             <span className="font-display font-bold text-xl">${subtotal.toFixed(2)}</span>
           </div>
-          <Button variant="outline" className="w-full mb-2 font-accent" onClick={() => { onOpenChange(false); navigate('/store'); }}>
+          {/* Continue Shopping Button */}
+          <Button
+            variant="outline"
+            className={`
+              w-full mb-2 font-accent transition
+              ${
+                mode === 'street'
+                  ? 'bg-white text-black border-black hover:bg-street-bg hover:text-street-fg'
+                  : mode === 'casual'
+                  ? 'bg-casual-accent text-casual-bg border-casual-accent hover:opacity-90'
+                  : 'bg-black text-white border-black hover:opacity-90'
+              }
+            `}
+            onClick={() => {
+              onOpenChange(false);
+              navigate('/store');
+            }}
+          >
             Continue Shopping
           </Button>
+          {/* Checkout Button */}
           <Button
-            className={`w-full font-accent mb-2 ${styles.accent} shadow-lg hover:scale-105 transition-transform`}
-            onClick={() => { onOpenChange(false); navigate('/checkout'); }}
+            className={`
+              w-full font-accent mb-2 shadow-lg hover:scale-105 transition-transform
+              ${
+                mode === 'street'
+                  ? 'bg-street-accent text-street-bg border-street-accent hover:bg-street-accent2 hover:text-street-bg'
+                  : mode === 'casual'
+                  ? 'bg-casual-accent text-casual-bg border-casual-accent hover:bg-casual-accent2'
+                  : 'bg-black text-white border-black hover:opacity-90'
+              }
+            `}
+            onClick={() => {
+              onOpenChange(false);
+              navigate('/checkout');
+            }}
           >
             Checkout
           </Button>
@@ -155,4 +185,4 @@ const CartDrawer = ({ open, onOpenChange }: { open: boolean; onOpenChange: (v: b
   );
 };
 
-export default CartDrawer; 
+export default CartDrawer;
